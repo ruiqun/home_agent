@@ -4,7 +4,8 @@ from linebot.v3.messaging import (
     Configuration,
     ApiClient,
     TextMessage,
-    ReplyMessageRequest
+    ReplyMessageRequest,
+    MarkMessagesAsReadRequest
 )
 from linebot.v3.webhook import WebhookHandler
 from linebot.v3.webhooks.models import (
@@ -39,8 +40,18 @@ class LineBotHandlers:
             try:
                 self.line_bot_api.reply_message(reply_message)
                 print(f"✅ 已成功回复用户: {reply_text}")
+
+                # # 标记消息为已读
+                # print("user_id:", event.source.user_id)
+                # print("message_id:", event.message.id)
+                # mark_read_request = MarkMessagesAsReadRequest(
+                #     chat={"userId": event.source.user_id},  # 使用 userId 而不是 id
+                #     last_message_id=event.message.id
+                # )
+                # self.line_bot_api.mark_messages_as_read(mark_read_request)
+                # print(f"✅ 已将消息标记为已读，消息 ID: {event.message.id}")
             except Exception as e:
-                print(f"❌ 发送消息失败: {e}")
+                print(f"❌ 发送消息或标记消息为已读失败: {e}")
 
         @self.handler.add(MessageEvent, message=StickerMessageContent)
         def handle_sticker_message(event):
@@ -61,7 +72,17 @@ class LineBotHandlers:
             try:
                 self.line_bot_api.reply_message(reply_message)
                 print(f"✅ 已成功回复用户: {reply_text}")
+
+                # # 标记消息为已读
+                # print("user_id:", event.source.user_id)
+                # print("message_id:", event.message.id)
+                # mark_read_request = MarkMessagesAsReadRequest(
+                #     chat={"userId": event.source.user_id},  # 使用 userId 而不是 id
+                #     last_message_id=event.message.id
+                # )
+                # self.line_bot_api.mark_messages_as_read(mark_read_request)
+                # print(f"✅ 已将消息标记为已读，消息 ID: {event.message.id}")
             except Exception as e:
-                print(f"❌ 发送消息失败: {e}")
+                print(f"❌ 发送消息或标记消息为已读失败: {e}")
 
         return self.handler
