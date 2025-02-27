@@ -1,5 +1,3 @@
-# linebot_handlers.py
-
 import os
 from linebot.v3.messaging import (
     MessagingApi,
@@ -33,17 +31,7 @@ class LineBotHandlers:
     def setup_handlers(self):
         @self.handler.add(MessageEvent, message=(TextMessageContent, ImageMessageContent, VideoMessageContent))
         def handle_message(event):
-            event_dict = {
-                "source": {
-                    "userId": event.source.user_id if event.source.type == "user" else None
-                },
-                "message": {
-                    "type": event.message.type,
-                    "id": event.message.id,
-                    "text": event.message.text if isinstance(event.message, TextMessageContent) else None
-                }
-            }
-            reply_text = process_message(event_dict, self.line_channel_access_token)
+            reply_text = process_message(event, self.line_channel_access_token)
             reply_message = ReplyMessageRequest(
                 reply_token=event.reply_token,
                 messages=[TextMessage(text=reply_text)]
@@ -54,10 +42,8 @@ class LineBotHandlers:
             except Exception as e:
                 print(f"❌ 发送消息失败: {e}")
 
-        # 处理贴图消息
         @self.handler.add(MessageEvent, message=StickerMessageContent)
         def handle_sticker_message(event):
-            # 修改此处，手动构建字典
             event_dict = {
                 "source": {
                     "userId": event.source.user_id if event.source.type == "user" else None
